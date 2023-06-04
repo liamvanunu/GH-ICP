@@ -11,6 +11,9 @@
 #include <pcl/visualization/common/common.h>
 #include <pcl/visualization/pcl_visualizer.h>
 
+//boost
+#include <boost/thread/thread.hpp>
+
 #include "utility.h"
 
 using namespace std;

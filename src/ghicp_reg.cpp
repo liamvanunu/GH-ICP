@@ -89,7 +89,21 @@ bool GHRegistration::ghicp_reg(Eigen::Matrix4d &Rt_final)
 
 		//Estimate transformation and then do updating
 		transformestimation(Rt_temp);
-		adjustweight();
+        if (estimated_IoU_ / IoU > adjustweight_ratio_)
+        {
+            EF.para1_penalty += adjustweight_step_;
+            EF.para2_penalty += adjustweight_step_;
+		}
+        else if (IoU / estimated_IoU_ > adjustweight_ratio_)
+        {
+            EF.para1_penalty -= adjustweight_step_;
+            EF.para2_penalty -= adjustweight_step_;
+		}
+        else
+        {
+            ;
+		}
+        cout << "IoU: " << IoU << " ,Penalty_ED: " << EF.para1_penalty << " ,Penalty_FD: " << EF.para2_penalty << endl;
 
 		Rt_tillnow = Rt_temp * Rt_tillnow;
 		cout << "Accumulated transformation matrix till now:" << endl

@@ -7,6 +7,7 @@
 #include "cloud_viewer.hpp"
 #include "ghicp_reg.h"
 #include "utility.h"
+#include <pcl/io/pcd_io.h>
 
 using namespace ghicp;
 
@@ -80,8 +81,14 @@ int main(int argc, char **argv)
 	//Import the data
 	DataIo<Point_T> dataio;
 	pcl::PointCloud<Point_T>::Ptr pointCloudT(new pcl::PointCloud<Point_T>()), pointCloudS(new pcl::PointCloud<Point_T>());
-	dataio.readCloudFile(filenameT, pointCloudT);
-	dataio.readCloudFile(filenameS, pointCloudS);
+    if (pcl::io::loadPCDFile<Point_T>(filenameT, *pointCloudT) == -1)
+    {
+        PCL_ERROR("Couldn't read file\n");
+	}
+    if (pcl::io::loadPCDFile<Point_T>(filenameS, *pointCloudS) == -1)
+    {
+        PCL_ERROR("Couldn't read file\n");
+	}
 
 	//Downsampling
 	CFilter<Point_T> cfilter;
